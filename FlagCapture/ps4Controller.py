@@ -1,4 +1,5 @@
 import pygame
+import json, os
 
 # Initialize pygame
 pygame.init()
@@ -15,94 +16,127 @@ if joystick_count == 0:
 joystick = pygame.joystick.Joystick(0)
 joystick.init()
 
+with open(os.path.join("ps4_keys.json"), 'r+') as file:
+    button_keys = json.load(file)
+
+# print(button_keys)
+
 # Main loop
 running = True
 while running:
     # Check for events
     for event in pygame.event.get():
-        # print event type & event button        
-        print(event)
+        # print event type & event button   
+        # if (event.type == pygame.JOYAXISMOTION and event.axis == 12)  or event.type != pygame.JOYAXISMOTION :     
+            # print(event)
+            # print(event.type)
+
         # print(event.type, event.button)
 
         # Quit event
         if event.type == pygame.QUIT:
             running = False
 
+        #D-pad controlles
+        if event.type == pygame.JOYHATMOTION: #JoyHatMotion : 1538
+            value = event.value
+            if value == (0, -1):
+                print("Down") # -100, 100  # Example: Move forward
+            elif value == (0, 1):
+                print("UP") # 100, -100  # Example: Move backward
+            elif value == (1, 0):
+                print("Right") # 100, 100  # Example: Turn right
+            elif value == (-1, 0):
+                print("Left") # -100, -100  # Example: Turn left
+            elif value == (1, 1):  # Diagonal: Up-Right
+                print("Up-Right") # 100, 100
+            elif value == (1, -1):  # Diagonal: Down-Right
+                print("Down-Right") # -100, 100
+            elif value == (-1, 1):  # Diagonal: Up-Left
+                print("Up-Left") # 100, -100
+            elif value == (-1, -1):  # Diagonal: Down-Left
+                print("Down-Left") # -100, -100
+            else:
+                print("D-Pad released") # 0, 0  # Stop
+
+
         # Button press event
         elif event.type == pygame.JOYBUTTONDOWN:         
             button = event.button
 
             # XYAB buttons
-            if button == 0:
+            if button == button_keys['x']:
                 print("X button pressed.")
-            elif button == 1:
-                print("Zero button pressed.")
-            elif button == 2:
+            elif button == button_keys['circle']:
+                print("Circle button pressed.")
+            elif button == button_keys['square']:
                 print("Square button pressed.")
-            elif button == 3:
-                print("triangle button pressed.")
+            elif button == button_keys['triangle']:
+                print("Triangle button pressed.")
+            elif button == button_keys['share']:
+                print("Share button pressed.")
+            elif button == button_keys['options']:
+                print("Options button pressed.")
 
             # L1, R1 buttons
-            elif button == 9:
+            elif button == button_keys['L1']:
                 print("L1 button pressed.")
-            elif button == 10:
-                print("R1 button pressed.")
-            
-            # D-pad buttons
-            elif button == 11:
-                print("D-pad up button pressed.")
-            elif button == 12:
-                print("D-pad down button pressed.")
-            elif button == 13:
-                print("D-pad left button pressed.")
-            elif button == 14:
-                print("D-pad right button pressed.")
-            # elif button == 12:
-            #     print("D-pad up-left button pressed.")
-            # elif button == 13:
-            #     print("D-pad up-right button pressed.")
-            # elif button == 14:
-            #     print("D-pad down-left button pressed.")
-            # elif button == 15:
-            #     print("D-pad down-right button pressed.")
+            elif button == button_keys['L2_btn']:
+                print("L2 button pressed.")
+            elif button == button_keys['R1']:
+                print("R1 button pressed.")            
+            elif button == button_keys['R2_btn']:
+                print("R2 button pressed.") 
+
+            # right stick & left stick btn
+            elif button == button_keys['left_stick_btn']:
+                print("Left stick button pressed.")
+            elif button == button_keys['right_stick_btn']:
+                print("Left stick button pressed.")
+
+            # touchpad btn 
+            elif button == button_keys['touchpad_btn']:
+                print("Touchpad btn pressed.")
+
 
         # Button release event
         elif event.type == pygame.JOYBUTTONUP:
             button = event.button
 
-             # XYAB buttons
-            if button == 0:
+            # XYAB buttons
+            if button == button_keys['x']:
                 print("X button released.")
-            elif button == 1:
-                print("Zero button released.")
-            elif button == 2:
+            elif button == button_keys['circle']:
+                print("Circle button released.")
+            elif button == button_keys['square']:
                 print("Square button released.")
-            elif button == 3:
-                print("triangle button released.")
+            elif button == button_keys['triangle']:
+                print("Triangle button released.")
+            elif button == button_keys['share']:
+                print("Share button released.")
+            elif button == button_keys['options']:
+                print("Options button released.")
 
             # L1, R1 buttons
-            elif button == 9:
+            elif button == button_keys['L1']:
                 print("L1 button released.")
-            elif button == 10:
-                print("R1 button released.")
+            elif button == button_keys['L2_btn']:
+                print("L2 button released.")
+            elif button == button_keys['R1']:
+                print("R1 button released.")            
+            elif button == button_keys['R2_btn']:
+                print("R2 button released.") 
+
+            # right stick & left stick btn
+            elif button == button_keys['left_stick_btn']:
+                print("Left stick button released.")
+            elif button == button_keys['right_stick_btn']:
+                print("Left stick button released.")
             
-            # D-pad buttons
-            elif button == 11:
-                print("D-pad up button released.")
-            elif button == 12:
-                print("D-pad down button released.")
-            elif button == 13:
-                print("D-pad left button released.")
-            elif button == 14:
-                print("D-pad right button released.")
-            # elif button == 12:
-            #     print("D-pad up-left button released.")
-            # elif button == 13:
-            #     print("D-pad up-right button released.")
-            # elif button == 14:
-            #     print("D-pad down-left button released.")
-            # elif button == 15:
-            #     print("D-pad down-right button released.")
+            # touchpad btn 
+            elif button == button_keys['touchpad_btn']:
+                print("Touchpad btn released.")
+            
 
         # Joystick axis movement event
         elif event.type == pygame.JOYAXISMOTION:
@@ -110,23 +144,23 @@ while running:
             value = event.value
 
             # Left joystick
-            if axis == 0:
+            if axis == button_keys['left_stick_x_axis']:
                 print(f"Left joystick X-axis moved to {value}.")
-            elif axis == 1:
+            elif axis == button_keys['left_stick_y_axis']:
                 print(f"Left joystick Y-axis moved to {value}.")
 
             # Right joystick
-            elif axis == 2:
+            elif axis == button_keys['right_stick_x_axis']:
                 print(f"Right joystick X-axis moved to {value}.")
-            elif axis == 3:
+            elif axis == button_keys['right_stick_y_axis']:
                 print(f"Right joystick Y-axis moved to {value}.")
 
             # L2 Var button
-            elif axis == 4:
+            elif axis == button_keys['L2_axis']:
                 print(f"L2 var button pressed to {value}.")
 
             # R2 Var button
-            elif axis == 5:
+            elif axis == button_keys['R2_axis']:
                 print(f"R2 var button pressed to {value}.")
 
 # Quit pygame
