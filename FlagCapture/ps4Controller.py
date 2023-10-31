@@ -41,23 +41,23 @@ while running:
         if event.type == pygame.JOYHATMOTION: #JoyHatMotion : 1538
             value = event.value
             if value == (0, -1):
-                print("Down") # -100, 100  # Example: Move forward
+                print("Down") 
             elif value == (0, 1):
-                print("UP") # 100, -100  # Example: Move backward
+                print("UP") 
             elif value == (1, 0):
-                print("Right") # 100, 100  # Example: Turn right
+                print("Right") 
             elif value == (-1, 0):
-                print("Left") # -100, -100  # Example: Turn left
-            elif value == (1, 1):  # Diagonal: Up-Right
-                print("Up-Right") # 100, 100
-            elif value == (1, -1):  # Diagonal: Down-Right
-                print("Down-Right") # -100, 100
-            elif value == (-1, 1):  # Diagonal: Up-Left
-                print("Up-Left") # 100, -100
-            elif value == (-1, -1):  # Diagonal: Down-Left
-                print("Down-Left") # -100, -100
+                print("Left") 
+            elif value == (1, 1):  
+                print("Up-Right") 
+            elif value == (1, -1):  
+                print("Down-Right") 
+            elif value == (-1, 1):  
+                print("Up-Left") 
+            elif value == (-1, -1):  
+                print("Down-Left") 
             else:
-                print("D-Pad released") # 0, 0  # Stop
+                print("D-Pad released") 
 
 
         # Button press event
