@@ -1,34 +1,31 @@
-import RPi.GPIO as GPIO
+import subprocess
+import re
 
-# Set the GPIO mode to BCM
-GPIO.setmode(GPIO.BOARD)
+# Define the command to run ds4drv as sudo
+command = "sudo ds4drv"
 
-# Define the GPIO pin to which the servo is connected
-servo_pin = 35
+# Start the ds4drv process
+process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
 
-# Set the GPIO pin as an output
-GPIO.setup(servo_pin, GPIO.OUT)
+# Regular expression pattern to match the controller connection message
+controller_connected_pattern = re.compile(r"Connected to Bluetooth Controller (\S+)")
 
-# Create a PWM instance with a frequency of 50Hz (typical for servos)
-pwm = GPIO.PWM(servo_pin, 50)
+# Continuously monitor for controller connections
+while True:
+    # Read the output from the ds4drv process
+    line = process.stdout.readline().decode("utf-8").strip()
+    if line:
+        print(line)
 
-# Start the PWM with a duty cycle of 7.5% (for a 90-degree position, adjust as needed)
-pwm.start(7.5)
+        # Check if the line contains a controller connection message
+        match = controller_connected_pattern.search(line)
+        if match:
+            bluetooth_address = match.group(1)
+            print(f"Controller connected: {bluetooth_address}")
+            break  # Break the loop when a controller is connected
 
-try:
-    while True:
-        # Get user input for the servo position
-        position = float(input("Enter servo position in degrees (0-180): "))
+# Continue with your code after the controller is connected
+print("You can now interact with the connected controller.")
 
-        if 0 <= position <= 180:
-            # Map the position to the duty cycle (0-180 degrees to 2.5-12.5%)
-            duty_cycle = 2.5 + (position / 180.0 * 10.0)
-            pwm.ChangeDutyCycle(duty_cycle)
-            print(f"Set servo position to {position} degrees.")
-        else:
-            print("Invalid input. Please enter a value between 0 and 180 degrees.")
-
-except KeyboardInterrupt:
-    # Stop the PWM and cleanup GPIO on Ctrl+C
-    pwm.stop()
-    GPIO.cleanup()
+# You can add additional code here to interact with the connected controller
+print("Controller connected")
